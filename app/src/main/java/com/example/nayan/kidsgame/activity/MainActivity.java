@@ -84,6 +84,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getOnlineContentsData();
         prepareDisplay();
         getLocalData();
+
     }
 
     private void databaseInit() {
