@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="140dp">
+
+        <ImageView
+            android:layout_margin="10dp"
+            android:scaleType="fitXY"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/level2_bg_img" />
+
+        <ImageView
+            android:id="@+id/imgLock"
+            android:layout_alignParentRight="true"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:src="@drawable/locksc" />
+    <TextView
+        android:layout_centerInParent="true"
+        android:id="@+id/txtLevel"
+        android:layout_width="match_parent"
+        android:text="1"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+    <!--<TextView-->
+        <!--android:id="@+id/txtLevel"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="center"-->
+        <!--android:text="1"-->
+        <!--android:textSize="20dp" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/txtPoint"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="center"-->
+        <!--android:text="1"-->
+        <!--android:textColor="#0f0"-->
+        <!--android:textSize="20dp"-->
+        <!--android:visibility="gone" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/txtStar"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="center"-->
+        <!--android:text="1"-->
+        <!--android:textColor="#ff0"-->
+        <!--android:visibility="gone" />-->
+
+    <!--<ImageView-->
+        <!--android:id="@+id/imgStar"-->
+        <!--android:layout_width="20dp"-->
+        <!--android:layout_height="20dp"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:visibility="gone" />-->
+
+
+<!--</RelativeLayout>-->
