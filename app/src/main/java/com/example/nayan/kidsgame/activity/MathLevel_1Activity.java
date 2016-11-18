@@ -15,6 +15,7 @@ import com.example.nayan.kidsgame.model.MQuestions;
 import com.example.nayan.kidsgame.model.MSubLevel;
 import com.example.nayan.kidsgame.utils.Global;
 import com.example.nayan.kidsgame.utils.MyDatabase;
+import com.example.nayan.kidsgame.utils.SpacesItemDecoration;
 import com.example.nayan.kidsgame.utils.Utils;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
@@ -61,7 +62,7 @@ public class MathLevel_1Activity extends AppCompatActivity {
         myDatabase = new MyDatabase(this);
         mQuestionses = new ArrayList<>();
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
-
+        recyclerView.addItemDecoration(new SpacesItemDecoration(5));
         txtQuestion = (TextView) findViewById(R.id.tct);
 
         matchLevelAdapter = new MathLevelAdapter(this);
@@ -103,6 +104,7 @@ public class MathLevel_1Activity extends AppCompatActivity {
     }
 
     public void preParedisplay() {
+        int item=Utils.getScreenSize(this,100);
 //        mQuestionses=myDatabase.getQuesData();
         if (index >= mQuestionses.size()) {
             MSubLevel mSubLevel = SubLevelActivity.mSubLevels.get(Global.INDEX_POSISION + 1);
@@ -119,7 +121,7 @@ public class MathLevel_1Activity extends AppCompatActivity {
             matchLevelAdapter.setData(mQuestionses.get(index).getOption());
             index++;
         }
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, item));
         recyclerView.setAdapter(matchLevelAdapter);
     }
 

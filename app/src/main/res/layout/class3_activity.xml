@@ -7,8 +7,6 @@
     android:background="@drawable/main_background"
     android:orientation="vertical">
 
-    <include layout="@layout/app_bar" />
-
     <TextView
         android:id="@+id/txtsname"
         android:layout_width="fill_parent"

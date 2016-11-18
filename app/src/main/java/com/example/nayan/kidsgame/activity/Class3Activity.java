@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,6 +11,8 @@ import com.example.nayan.kidsgame.R;
 import com.example.nayan.kidsgame.adapter.Class3AdapterOfBangla;
 import com.example.nayan.kidsgame.model.MContents;
 import com.example.nayan.kidsgame.utils.MyDatabase;
+import com.example.nayan.kidsgame.utils.SpacesItemDecoration;
+import com.example.nayan.kidsgame.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -25,7 +26,6 @@ public class Class3Activity extends AppCompatActivity {
     private ImageView imgSetting;
     private RecyclerView recyclerView;
     private Class3AdapterOfBangla class3Adapter;
-    private Toolbar toolbar;
     private MyDatabase database;
     public String parentName;
     private TextView txtName;
@@ -44,11 +44,8 @@ public class Class3Activity extends AppCompatActivity {
     }
 
     private void prepareDisplay() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        int item= Utils.getScreenSize(this,100);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, item));
         recyclerView.setAdapter(class3Adapter);
     }
 
@@ -76,13 +73,13 @@ public class Class3Activity extends AppCompatActivity {
 
     private void init() {
         database = new MyDatabase(this);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
         txtName=(TextView)findViewById(R.id.txtsname);
 //        imgSetting = (ImageView) findViewById(R.id.imgseting);
 //        imgSetting.setOnClickListener(this);
 //        NLogic.getInstance(this).setLevel(mContents);
         imageArrayList = new ArrayList<>();
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
+        recyclerView.addItemDecoration(new SpacesItemDecoration(5));
         class3Adapter = new Class3AdapterOfBangla(this);
 
     }

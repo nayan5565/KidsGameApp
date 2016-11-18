@@ -56,8 +56,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Tracker tracker;
     //    private RecyclerView recyclerView;
     private String image;
-    private static String B_URL=Global.BASE_URL;
-    private static String ALTER_URL="";
+    private static String B_URL = Global.BASE_URL;
+    private static String ALTER_URL = "";
     private Gson gson;
 
     @Override
@@ -83,7 +83,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                .setAction("Share")
 //                .build());
 
-
         init();
         getOnlineData();
         getOnlineContentsData();
@@ -92,9 +91,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    private void databaseInit() {
-        int ic;
-    }
 
     public static String getPath(String fileName) {
         String dir = Environment.getExternalStorageDirectory().getAbsolutePath() + File.separator + "Match Game";
@@ -177,12 +173,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getOnlineData() {
-        if (!Utils.isInternetOn(this)){
-            Toast.makeText(this,"lost internet connection",Toast.LENGTH_SHORT).show();
+        if (!Utils.isInternetOn(this)) {
+            Toast.makeText(this, "lost internet connection", Toast.LENGTH_SHORT).show();
             return;
         }
         AsyncHttpClient client = new AsyncHttpClient();
-        client.post(B_URL+Global.API_LEVELS, new JsonHttpResponseHandler() {
+        client.post(B_URL + Global.API_LEVELS, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         super.onSuccess(statusCode, headers, response);
@@ -245,7 +241,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                         super.onFailure(statusCode, headers, responseString, throwable);
-                        B_URL=ALTER_URL;
+                        B_URL = ALTER_URL;
                         getOnlineData();
                         Log.e("json", "onfailer :" + responseString);
                     }
@@ -274,14 +270,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getOnlineContentsData() {
-        if (!Utils.isInternetOn(this)){
-            Toast.makeText(this,"lost internet connection",Toast.LENGTH_SHORT).show();
+        if (!Utils.isInternetOn(this)) {
+            Toast.makeText(this, "lost internet connection", Toast.LENGTH_SHORT).show();
             return;
         }
 
         AsyncHttpClient httpClient = new AsyncHttpClient();
 
-        httpClient.post(B_URL+Global.API_CONTENTS, new JsonHttpResponseHandler() {
+        httpClient.post(B_URL + Global.API_CONTENTS, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
@@ -316,7 +312,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                 super.onFailure(statusCode, headers, responseString, throwable);
-                B_URL=ALTER_URL;
+                B_URL = ALTER_URL;
                 getOnlineContentsData();
             }
         });

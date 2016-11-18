@@ -22,7 +22,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -152,37 +152,37 @@
             <!--android:layout_weight="1"-->
             <!--android:gravity="center" />-->
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="fill_parent"
-                android:gravity="bottom"
-                android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/special"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="বিশেষত্ব "
-                    android:textSize="25dp" />
-
-                <Button
-                    android:id="@+id/result"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="ফলাফল "
-                    android:textSize="25dp" />
-
-
-            </LinearLayout>
 
 
         </LinearLayout>
 
 
     </ScrollView>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="bottom"
+        android:orientation="horizontal">
 
+        <Button
+            android:id="@+id/special"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="বিশেষত্ব "
+            android:textSize="25dp" />
+
+        <Button
+            android:id="@+id/result"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="ফলাফল "
+            android:textSize="25dp" />
+
+
+    </LinearLayout>
 
     <com.google.android.gms.ads.AdView
         android:id="@+id/adView"

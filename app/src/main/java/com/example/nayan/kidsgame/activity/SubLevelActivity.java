@@ -8,7 +8,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,13 +15,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.nayan.kidsgame.model.MLevel;
-import com.example.nayan.kidsgame.utils.DialogSoundOnOff;
 import com.example.nayan.kidsgame.R;
 import com.example.nayan.kidsgame.adapter.SubLevelAdapter;
-import com.example.nayan.kidsgame.utils.MyDatabase;
 import com.example.nayan.kidsgame.model.MContents;
+import com.example.nayan.kidsgame.model.MLevel;
 import com.example.nayan.kidsgame.model.MSubLevel;
+import com.example.nayan.kidsgame.utils.DialogSoundOnOff;
+import com.example.nayan.kidsgame.utils.MyDatabase;
 import com.example.nayan.kidsgame.utils.Utils;
 
 import java.util.ArrayList;
@@ -38,7 +37,6 @@ public class SubLevelActivity extends AppCompatActivity implements View.OnClickL
     private static MLevel mLevel = new MLevel();
     private MyDatabase database;
     private RecyclerView recyclerView;
-    private Toolbar toolbar;
     private TextView textView;
     private String lName;
     private int STORAGE_PERMISSION_CODE = 23;
@@ -167,11 +165,10 @@ public class SubLevelActivity extends AppCompatActivity implements View.OnClickL
         database = new MyDatabase(this);
         textView = (TextView) findViewById(R.id.txtPName);
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
+//        recyclerView.addItemDecoration(new SpacesItemDecoration(0));
         // if (value == Utils.EASY) {
 
         //}
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         subLevelAdapter = new SubLevelAdapter(this);
 
@@ -179,12 +176,9 @@ public class SubLevelActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void prepareDisplay() {
+        int item=Utils.getScreenSize(this,100);
         textView.setText(lName);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
+        recyclerView.setLayoutManager(new GridLayoutManager(this, item));
         recyclerView.setAdapter(subLevelAdapter);
     }
 

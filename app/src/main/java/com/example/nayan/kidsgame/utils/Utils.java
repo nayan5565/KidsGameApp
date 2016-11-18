@@ -2,11 +2,14 @@ package com.example.nayan.kidsgame.utils;
 
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Point;
 import android.media.MediaPlayer;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+import android.view.Display;
 import android.view.View;
 
 import com.example.nayan.kidsgame.model.MContents;
@@ -58,12 +61,13 @@ public class Utils {
 
         return num;
     }
-    public static String databasePassKey(String emailName, String deviceId){
-        String firstChOfEmail=emailName.substring(0,1);
-        String lastChOfEmail=emailName.substring(emailName.indexOf("@")-1,emailName.indexOf("@"));
-        String firstNumOfDeviceId=deviceId.substring(0,1);
-        String secondNumOfDeviceId=deviceId.substring(deviceId.length()-1);
-        return firstChOfEmail+lastChOfEmail+firstNumOfDeviceId+secondNumOfDeviceId;
+
+    public static String databasePassKey(String emailName, String deviceId) {
+        String firstChOfEmail = emailName.substring(0, 1);
+        String lastChOfEmail = emailName.substring(emailName.indexOf("@") - 1, emailName.indexOf("@"));
+        String firstNumOfDeviceId = deviceId.substring(0, 1);
+        String secondNumOfDeviceId = deviceId.substring(deviceId.length() - 1);
+        return firstChOfEmail + lastChOfEmail + firstNumOfDeviceId + secondNumOfDeviceId;
     }
 
     public static void zoom(View view, boolean isLeft) {
@@ -88,6 +92,24 @@ public class Utils {
         animator.setDuration(2000);
         animator.start();
     }
+
+    public static int getScreenSize(Activity activity, int itemSize) {
+        Display display = activity.getWindowManager().getDefaultDisplay();
+        Point size = new Point();
+        display.getSize(size);
+        itemSize=getPixel(activity,itemSize);
+        int width = size.x;
+        int height = size.y;
+        int item = (width -5) / (itemSize + 5);
+        return item;
+
+    }
+    public static int getPixel(Context context, int pixel) {
+        float density = context.getResources().getDisplayMetrics().density;
+        int paddingDp = (int) (pixel * density);
+        return paddingDp;
+    }
+
     public static boolean isInternetOn(Context context) {
 
         try {

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="140dp">
+    android:layout_width="100dp"
+    android:layout_height="100dp">
 
         <ImageView
-            android:layout_margin="10dp"
             android:scaleType="fitXY"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -13,8 +12,8 @@
         <ImageView
             android:id="@+id/imgLock"
             android:layout_alignParentRight="true"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:src="@drawable/locksc" />
     <TextView
         android:layout_centerInParent="true"

@@ -8,20 +8,19 @@
     android:orientation="vertical"
     tools:context=".activity.Class1Activity">
 
-    <include layout="@layout/app_bar" />
     <TextView
         android:id="@+id/txtName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textColor="#f0f"
         android:text="mn"
-        android:textSize="30dp"/>
+        android:textSize="30dp" />
 
     <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="50dp"
         android:id="@+id/recycler"
-
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_height="match_parent"/>
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -31,23 +30,20 @@
 
         <ImageView
             android:id="@+id/imgSound"
-            android:layout_width="40dp"
+            android:layout_width="1dp"
             android:layout_height="40dp"
             android:layout_gravity="left"
+            android:layout_weight="1"
             android:src="@drawable/on"
             android:visibility="gone" />
-
-        <View
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_weight="1" />
 
         <ImageView
             android:id="@+id/imgseting"
 
-            android:layout_width="40dp"
+            android:layout_width="1dp"
             android:layout_height="40dp"
             android:layout_gravity="right"
+            android:layout_weight="1"
             android:src="@drawable/settings"
             android:visibility="gone" />
 

@@ -4,16 +4,17 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.nayan.kidsgame.R;
 import com.example.nayan.kidsgame.adapter.Class2AdapterOfBangla;
+import com.example.nayan.kidsgame.model.MContents;
 import com.example.nayan.kidsgame.utils.Global;
 import com.example.nayan.kidsgame.utils.MyDatabase;
 import com.example.nayan.kidsgame.utils.NLogic;
-import com.example.nayan.kidsgame.model.MContents;
+import com.example.nayan.kidsgame.utils.SpacesItemDecoration;
+import com.example.nayan.kidsgame.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -28,7 +29,6 @@ public class Class2Activity extends AppCompatActivity {
     private ImageView imgSetting;
     private RecyclerView recyclerView;
     private Class2AdapterOfBangla class1AdapterOfBangla;
-    private Toolbar toolbar;
     private MyDatabase database;
     private TextView textView;
     public String subLevel;
@@ -84,22 +84,19 @@ public class Class2Activity extends AppCompatActivity {
     private void init() {
         textView=(TextView)findViewById(R.id.txtNam);
         database = new MyDatabase(this);
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
         imgSetting = (ImageView) findViewById(R.id.imgseting);
 //        imgSetting.setOnClickListener(this);
         NLogic.getInstance(this).setLevel(mContents);
         imageArrayList = new ArrayList<>();
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
+        recyclerView.addItemDecoration(new SpacesItemDecoration(5));
         class1AdapterOfBangla = new Class2AdapterOfBangla(this);
         recyclerView.setAdapter(class1AdapterOfBangla);
     }
 
     private void prepareDisplay() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+        int item= Utils.getScreenSize(this,100);
+        recyclerView.setLayoutManager(new GridLayoutManager(this, item));
         recyclerView.setAdapter(class1AdapterOfBangla);
     }
 }
