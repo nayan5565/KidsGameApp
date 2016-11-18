@@ -48,7 +48,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="right"
-            android:src="@drawable/sett"
+            android:src="@drawable/settings"
             android:visibility="gone" />
 
 

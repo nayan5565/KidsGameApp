@@ -25,8 +25,10 @@ import com.example.nayan.kidsgame.model.MLevel;
 import com.example.nayan.kidsgame.model.MSubLevel;
 import com.example.nayan.kidsgame.utils.DialogSoundOnOff;
 import com.example.nayan.kidsgame.utils.Global;
+import com.example.nayan.kidsgame.utils.InMobAdManager;
 import com.example.nayan.kidsgame.utils.MyDatabase;
 import com.example.nayan.kidsgame.utils.Utils;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
@@ -64,8 +66,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.level_activity);
         result = (Button) findViewById(R.id.result);
 //        VungleAdManager.getInstance(this).playAdOptions();
-//        AdView adView = (AdView) findViewById(R.id.adView);
-//        InMobAdManager.getInstance(this).loadAd(adView);
+        AdView adView = (AdView) findViewById(R.id.adView);
+        InMobAdManager.getInstance(this).loadAd(adView);
         // [START shared_tracker]
         // Obtain the shared Tracker instance.
 //        AnalyticsApplication application = (AnalyticsApplication) getApplication();
