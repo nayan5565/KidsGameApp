@@ -15,6 +15,7 @@ import com.example.nayan.kidsgame.model.MQuestions;
 import com.example.nayan.kidsgame.model.MSubLevel;
 import com.example.nayan.kidsgame.utils.Global;
 import com.example.nayan.kidsgame.utils.MyDatabase;
+import com.example.nayan.kidsgame.utils.Utils;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -32,9 +33,12 @@ public class MathLevel_1Activity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private MathLevelAdapter matchLevelAdapter;
     private TextView txtQuestion;
+    MQuestions mQuestions = new MQuestions();
     private static MathLevel_1Activity instance;
     int index;
+    MItem mItem = new MItem();
     private Gson gson;
+    MyDatabase myDatabase;
 
     public static MathLevel_1Activity getInstance() {
 
@@ -50,52 +54,62 @@ public class MathLevel_1Activity extends AppCompatActivity {
 //        generate();
         getOnlineData();
 //        preParedisplay();
-        Global.INDEX_POSISION = getIntent().getIntExtra("index",0);
+        Global.INDEX_POSISION = getIntent().getIntExtra("index", 0);
     }
 
     private void init() {
-
+        myDatabase = new MyDatabase(this);
         mQuestionses = new ArrayList<>();
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
 
         txtQuestion = (TextView) findViewById(R.id.tct);
 
         matchLevelAdapter = new MathLevelAdapter(this);
-        gson=new Gson();
+        gson = new Gson();
 
 
     }
 
     private void getOnlineData() {
-        AsyncHttpClient client=new AsyncHttpClient();
-        client.post(Global.API_MATH,new JsonHttpResponseHandler()
-        {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                super.onSuccess(statusCode, headers, response);
-                try {
-                    JSONArray data=response.getJSONArray("data");
-                    MQuestions[] ques=gson.fromJson(data.toString(),MQuestions[].class);
 
-                    mQuestionses=new ArrayList<MQuestions>(Arrays.asList(ques));
-                    preParedisplay();
-                }catch (Exception e){
 
-                }
-
-            }
+        if (!Utils.isInternetOn(this)) {
+            Toast.makeText(this, "lost internet connection", Toast.LENGTH_SHORT).show();
+            return;
         }
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.post(Global.API_MATH, new JsonHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        super.onSuccess(statusCode, headers, response);
+                        try {
+                            JSONArray data = response.getJSONArray("data");
+                            MQuestions[] ques = gson.fromJson(data.toString(), MQuestions[].class);
+//                            myDatabase.addQuesData(mQuestions);
+//                            myDatabase.addOptonData(mItem);
+                            mQuestionses = new ArrayList<MQuestions>(Arrays.asList(ques));
+                            preParedisplay();
+                        } catch (Exception e) {
+
+                        }
+
+                    }
+                }
         );
     }
 
-    public void preParedisplay() {
+    private void getLocalData() {
 
+    }
+
+    public void preParedisplay() {
+//        mQuestionses=myDatabase.getQuesData();
         if (index >= mQuestionses.size()) {
-            MSubLevel mSubLevel=SubLevelActivity.mSubLevels.get(Global.INDEX_POSISION+1);
-            MLock mLock=new MLock();
+            MSubLevel mSubLevel = SubLevelActivity.mSubLevels.get(Global.INDEX_POSISION + 1);
+            MLock mLock = new MLock();
             mLock.setId(mSubLevel.getLid());
             mLock.setUnlockNextLevel(1);
-            MyDatabase db=new MyDatabase(this);
+            MyDatabase db = new MyDatabase(this);
             db.addLockData(mLock);
             Toast.makeText(this, "level completed", Toast.LENGTH_SHORT).show();
             index = 0;

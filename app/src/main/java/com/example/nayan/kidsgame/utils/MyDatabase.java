@@ -6,8 +6,10 @@ import android.database.Cursor;
 import android.util.Log;
 
 import com.example.nayan.kidsgame.model.MContents;
+import com.example.nayan.kidsgame.model.MItem;
 import com.example.nayan.kidsgame.model.MLevel;
 import com.example.nayan.kidsgame.model.MLock;
+import com.example.nayan.kidsgame.model.MQuestions;
 import com.example.nayan.kidsgame.model.MSubLevel;
 
 import net.sqlcipher.database.SQLiteDatabase;
@@ -26,16 +28,23 @@ public class MyDatabase {
     private static final String DATABASE_CONTENTS_TABLE = "contents";
     private static final String DATABASE_LOCK_TABLE = "lock";
     private static final String DATABASE_SUB_LEVEL_TABLE = "sub";
+    private static final String DATABASE_QUES_TABLE = "ques";
+    private static final String DATABASE_OPTION_TABLE = "option";
 
     private static final String KEY_UPDATE_DATE = "update_date";
     private static final String KEY_TOTAL_S_LEVEL = "total_slevel";
     private static final String KEY_DIFFICULTY = "difficulty";
     private static final String KEY_LEVEL_ID = "lid";
+    private static final String KEY_ITEM = "item";
+    private static final String KEY_TAG = "tag";
     private static final String KEY_MODEL_ID = "mid";
     private static final String KEY_LOCK_ID = "loid";
     private static final String KEY_UNLOCK = "unlock";
+    private static final String KEY_Q_ID = "qid";
+    private static final String KEY_OP_ID = "opid";
     private static final String KEY_PARENT_ID = "pid";
     private static final String KEY_PARENT_NAME = "pNm";
+    private static final String KEY_QUES = "question";
     private static final String KEY_SEN = "sen";
     private static final String KEY_IMAGE = "img";
     private static final String KEY_SOUNDS = "aud";
@@ -50,7 +59,7 @@ public class MyDatabase {
     private static final String KEY_LEVEL_WIN_COUNT = "win_count";
 
     private final String TAG = getClass().getSimpleName();
-    private final String PASS = "test123";
+    private final String PASS = Utils.databasePassKey("nayan5565@gmail.com","Asus");
 
     private SQLiteDatabase db;
 
@@ -88,6 +97,15 @@ public class MyDatabase {
             + DATABASE_LOCK_TABLE + "("
             + KEY_LOCK_ID + " integer primary key, "
             + KEY_UNLOCK + " integer)";
+    private static final String DATABASE_CREATE_OPTION_TABLE = "create table if not exists "
+            + DATABASE_OPTION_TABLE + "("
+            + KEY_OP_ID + " integer primary key, "
+            + KEY_ITEM + " integer, "
+            + KEY_TAG + " integer)";
+    private static final String DATABASE_CREATE_QUES_TABLE = "create table if not exists "
+            + DATABASE_QUES_TABLE + "("
+            + KEY_Q_ID + " integer primary key, "
+            + KEY_QUES + " text)";
 
     public MyDatabase(Context context) {
 
@@ -112,6 +130,8 @@ public class MyDatabase {
         db.execSQL(DATABASE_CREATE_CONTENTS_TABLE);
         db.execSQL(DATABASE_CREATE_SUB_LEVEL_TABLE);
         db.execSQL(DATABASE_CREATE_LOCK_TABLE);
+        db.execSQL(DATABASE_CREATE_QUES_TABLE);
+        db.execSQL(DATABASE_CREATE_OPTION_TABLE);
 
     }
 
@@ -238,6 +258,57 @@ public class MyDatabase {
         cursor.close();
     }
 
+    public void addQuesData(MQuestions mQuestions) {
+        Cursor cursor = null;
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_QUES, mQuestions.getQues());
+
+            String sql = "select * from " + DATABASE_QUES_TABLE;
+            cursor = db.rawQuery(sql, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                int update = db.update(DATABASE_QUES_TABLE, values, KEY_Q_ID + "=?", new String[]{mQuestions.getId() + ""});
+                Log.e("log", "content update : " + update);
+            } else {
+                long v = db.insert(DATABASE_QUES_TABLE, null, values);
+                Log.e("log", "content insert : " + v);
+
+            }
+
+
+        } catch (Exception e) {
+
+        }
+
+        cursor.close();
+    }
+
+    public void addOptonData(MItem mItem) {
+        Cursor cursor = null;
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_ITEM, mItem.getItem());
+            values.put(KEY_TAG, mItem.getTag());
+
+            String sql = "select * from " + DATABASE_QUES_TABLE;
+            cursor = db.rawQuery(sql, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                int update = db.update(DATABASE_OPTION_TABLE, values, KEY_OP_ID + "=?", new String[]{mItem.getId() + ""});
+                Log.e("log", "content update : " + update);
+            } else {
+                long v = db.insert(DATABASE_OPTION_TABLE, null, values);
+                Log.e("log", "content insert : " + v);
+
+            }
+
+
+        } catch (Exception e) {
+
+        }
+
+        cursor.close();
+    }
+
 
     public ArrayList<MLevel> getLevelData() {
         ArrayList<MLevel> levelArrayList = new ArrayList<>();
@@ -286,6 +357,49 @@ public class MyDatabase {
 
 
         return mLock;
+    }
+
+    public ArrayList<MQuestions> getQuesData() {
+        ArrayList<MQuestions> mQuestionses = new ArrayList<>();
+        MQuestions mQuestions = new MQuestions();
+        String sql = "select a.question,b.item,b.tag  from ques a right join option b on a.qid=b.opid ";
+        Cursor cursor = db.rawQuery(sql, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+
+                mQuestions.setQues(cursor.getString(cursor.getColumnIndex(KEY_QUES)));
+                mQuestions.setId(cursor.getInt(cursor.getColumnIndex(KEY_Q_ID)));
+
+                mQuestionses.add(mQuestions);
+
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+
+
+        return mQuestionses;
+    }
+
+    public ArrayList<MItem> getOptionData() {
+        ArrayList<MItem> mItems = new ArrayList<>();
+        MItem mItem = new MItem();
+        String sql = "select * from " + DATABASE_QUES_TABLE;
+        Cursor cursor = db.rawQuery(sql, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+
+                mItem.setItem(cursor.getInt(cursor.getColumnIndex(KEY_ITEM)));
+                mItem.setId(cursor.getInt(cursor.getColumnIndex(KEY_OP_ID)));
+                mItem.setTag(cursor.getInt(cursor.getColumnIndex(KEY_TAG)));
+
+                mItems.add(mItem);
+
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+
+
+        return mItems;
     }
 
     public ArrayList<MSubLevel> getSubLevelData(int id) {

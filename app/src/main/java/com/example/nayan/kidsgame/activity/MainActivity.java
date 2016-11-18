@@ -17,6 +17,7 @@ import android.view.Window;
 import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.nayan.kidsgame.R;
 import com.example.nayan.kidsgame.model.MContents;
@@ -53,6 +54,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Tracker tracker;
     //    private RecyclerView recyclerView;
     private String image;
+    private static String B_URL=Global.BASE_URL;
+    private static String ALTER_URL="";
     private Gson gson;
 
     @Override
@@ -172,9 +175,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getOnlineData() {
-
+        if (!Utils.isInternetOn(this)){
+            Toast.makeText(this,"lost internet connection",Toast.LENGTH_SHORT).show();
+            return;
+        }
         AsyncHttpClient client = new AsyncHttpClient();
-        client.post(Global.API_LEVELS, new JsonHttpResponseHandler() {
+        client.post(B_URL+Global.API_LEVELS, new JsonHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                         super.onSuccess(statusCode, headers, response);
@@ -237,6 +243,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     @Override
                     public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                         super.onFailure(statusCode, headers, responseString, throwable);
+                        B_URL=ALTER_URL;
+                        getOnlineData();
                         Log.e("json", "onfailer :" + responseString);
                     }
                 }
@@ -264,8 +272,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getOnlineContentsData() {
+        if (!Utils.isInternetOn(this)){
+            Toast.makeText(this,"lost internet connection",Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         AsyncHttpClient httpClient = new AsyncHttpClient();
-        httpClient.post(Global.API_CONTENTS, new JsonHttpResponseHandler() {
+
+        httpClient.post(B_URL+Global.API_CONTENTS, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 super.onSuccess(statusCode, headers, response);
@@ -296,8 +310,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
                 saveContentsToDb();
             }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                super.onFailure(statusCode, headers, responseString, throwable);
+                B_URL=ALTER_URL;
+                getOnlineContentsData();
+            }
         });
     }
+    // it will help to know phone is connected to internet or not
+    // in this case ACCESS_NETWORK_STATE is needed as permission
+
 
     private void saveLevelToDb() {
         Log.e("SAVE", "Level size:" + Utils.levels.size());

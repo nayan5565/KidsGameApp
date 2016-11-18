@@ -4,6 +4,8 @@ import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 import android.view.View;
 
@@ -56,6 +58,13 @@ public class Utils {
 
         return num;
     }
+    public static String databasePassKey(String emailName, String deviceId){
+        String firstChOfEmail=emailName.substring(0,1);
+        String lastChOfEmail=emailName.substring(emailName.indexOf("@")-1,emailName.indexOf("@"));
+        String firstNumOfDeviceId=deviceId.substring(0,1);
+        String secondNumOfDeviceId=deviceId.substring(deviceId.length()-1);
+        return firstChOfEmail+lastChOfEmail+firstNumOfDeviceId+secondNumOfDeviceId;
+    }
 
     public static void zoom(View view, boolean isLeft) {
         ObjectAnimator animator = ObjectAnimator.ofFloat(view, "scaleX", 1.0f, 1.2f);
@@ -78,6 +87,25 @@ public class Utils {
         animator.setRepeatCount(1);
         animator.setDuration(2000);
         animator.start();
+    }
+    public static boolean isInternetOn(Context context) {
+
+        try {
+            ConnectivityManager con = (ConnectivityManager) context
+                    .getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo wifi, mobile;
+            wifi = con.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+            mobile = con.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
+
+            if (wifi.isConnectedOrConnecting() || mobile.isConnectedOrConnecting()) {
+                return true;
+            }
+
+
+        } catch (Exception e) {
+            // TODO: handle exception
+        }
+        return false;
     }
 
 }

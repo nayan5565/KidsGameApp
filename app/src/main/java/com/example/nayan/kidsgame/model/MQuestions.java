@@ -7,6 +7,16 @@ import java.util.ArrayList;
  */
 
 public class MQuestions {
+    private int id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     private String ques;
     private ArrayList<MItem> option;
 

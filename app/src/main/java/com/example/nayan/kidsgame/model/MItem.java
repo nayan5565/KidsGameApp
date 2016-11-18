@@ -5,7 +5,15 @@ package com.example.nayan.kidsgame.model;
  */
 
 public class MItem {
-    private int item,tag;
+    private int item,tag,id;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public int getItem() {
         return item;

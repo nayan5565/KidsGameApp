@@ -4,13 +4,12 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -56,9 +55,8 @@ public class DownLoadAsyncTask extends AsyncTask<String, Integer, Boolean> {
             outputStream.close();
             inputStream.close();
             return true;
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (Exception e) {
+            Toast.makeText(context,"internet problem",Toast.LENGTH_SHORT).show();
             e.printStackTrace();
         }
         return false;
