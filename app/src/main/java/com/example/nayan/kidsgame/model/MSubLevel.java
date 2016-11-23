@@ -18,21 +18,21 @@ public class MSubLevel {
     }
 
     private String parentName;
-    private int lid;
+
+    public int getBestPoint() {
+        return bestPoint;
+    }
+
+    public void setBestPoint(int bestPoint) {
+        this.bestPoint = bestPoint;
+    }
+
+    private int lid,bestPoint;
     private String name;
     private String coins_price;
     private String no_of_coins;
     private boolean lock=true;
     private int unlockNextLevel;
-    private int indexPosision;
-
-    public int getIndexPosision() {
-        return indexPosision;
-    }
-
-    public void setIndexPosision(int indexPosision) {
-        this.indexPosision = indexPosision;
-    }
 
     public int getUnlockNextLevel() {
         return unlockNextLevel;

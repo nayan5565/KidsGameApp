@@ -54,6 +54,7 @@ public class Class1Activity extends AppCompatActivity implements View.OnClickLis
         getLocalData();
         subLevel = getIntent().getStringExtra("subLevel");
         Global.INDEX_POSISION = getIntent().getIntExtra("index",0);
+        Global.SUB_LEVEL_ID = getIntent().getIntExtra("Sid",0);
         parentName = getIntent().getStringExtra("parentLevel");
         txtName.setText(parentName + "(" + subLevel + ")");
 

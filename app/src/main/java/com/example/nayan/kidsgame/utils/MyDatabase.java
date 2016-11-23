@@ -9,6 +9,7 @@ import com.example.nayan.kidsgame.model.MContents;
 import com.example.nayan.kidsgame.model.MItem;
 import com.example.nayan.kidsgame.model.MLevel;
 import com.example.nayan.kidsgame.model.MLock;
+import com.example.nayan.kidsgame.model.MPoint;
 import com.example.nayan.kidsgame.model.MQuestions;
 import com.example.nayan.kidsgame.model.MSubLevel;
 
@@ -26,11 +27,14 @@ public class MyDatabase {
     private static final int DATABASE_VERSION = 2;
     private static final String DATABASE_LEVEL_TABLE = "level";
     private static final String DATABASE_CONTENTS_TABLE = "contents";
-    private static final String DATABASE_LOCK_TABLE = "lock";
+    private static final String DATABASE_LOCK_TABLE = "lock_tb";
     private static final String DATABASE_SUB_LEVEL_TABLE = "sub";
     private static final String DATABASE_QUES_TABLE = "ques";
     private static final String DATABASE_OPTION_TABLE = "option";
+    private static final String DATABASE_POINT_TABLE = "point_tb";
 
+    private static final String KEY_POINT_ID = "point_id";
+    private static final String KEY_PRESENT_POINT = "present_point";
     private static final String KEY_UPDATE_DATE = "update_date";
     private static final String KEY_TOTAL_S_LEVEL = "total_slevel";
     private static final String KEY_DIFFICULTY = "difficulty";
@@ -39,7 +43,7 @@ public class MyDatabase {
     private static final String KEY_TAG = "tag";
     private static final String KEY_MODEL_ID = "mid";
     private static final String KEY_LOCK_ID = "loid";
-    private static final String KEY_UNLOCK = "unlock";
+    private static final String KEY_UNLOCK = "un_lock";
     private static final String KEY_Q_ID = "qid";
     private static final String KEY_OP_ID = "opid";
     private static final String KEY_PARENT_ID = "pid";
@@ -59,7 +63,7 @@ public class MyDatabase {
     private static final String KEY_LEVEL_WIN_COUNT = "win_count";
 
     private final String TAG = getClass().getSimpleName();
-    private final String PASS = Utils.databasePassKey("nayan5565@gmail.com","Asus");
+    private final String PASS = Utils.databasePassKey("nayan5565@gmail.com", "Asus");
 
     private SQLiteDatabase db;
 
@@ -90,12 +94,14 @@ public class MyDatabase {
             + KEY_NAME + " text, "
             + KEY_PARENT_ID + " integer, "
             + KEY_UNLOCK + " integer, "
+            + KEY_BEST_POINT + " integer, "
             + KEY_PARENT_NAME + " text, "
             + KEY_COINS_PRICE + " text, "
             + KEY_NO_OF_COINS + " text)";
     private static final String DATABASE_CREATE_LOCK_TABLE = "create table if not exists "
             + DATABASE_LOCK_TABLE + "("
             + KEY_LOCK_ID + " integer primary key, "
+            + KEY_BEST_POINT + " integer, "
             + KEY_UNLOCK + " integer)";
     private static final String DATABASE_CREATE_OPTION_TABLE = "create table if not exists "
             + DATABASE_OPTION_TABLE + "("
@@ -106,6 +112,11 @@ public class MyDatabase {
             + DATABASE_QUES_TABLE + "("
             + KEY_Q_ID + " integer primary key, "
             + KEY_QUES + " text)";
+    private static final String DATABASE_CREATE_POINT_TABLE = "create table if not exists "
+            + DATABASE_POINT_TABLE + "("
+            + KEY_PRESENT_POINT + " integer, "
+            + KEY_POINT_ID + " integer primary key, "
+            + KEY_BEST_POINT + " integer)";
 
     public MyDatabase(Context context) {
 
@@ -132,6 +143,7 @@ public class MyDatabase {
         db.execSQL(DATABASE_CREATE_LOCK_TABLE);
         db.execSQL(DATABASE_CREATE_QUES_TABLE);
         db.execSQL(DATABASE_CREATE_OPTION_TABLE);
+        db.execSQL(DATABASE_CREATE_POINT_TABLE);
 
     }
 
@@ -177,6 +189,7 @@ public class MyDatabase {
             values.put(KEY_LEVEL_ID, mSubLevel.getLid());
             values.put(KEY_PARENT_ID, mSubLevel.getParentId());
             values.put(KEY_UNLOCK, mSubLevel.getUnlockNextLevel());
+            values.put(KEY_BEST_POINT, mSubLevel.getBestPoint());
             values.put(KEY_PARENT_NAME, mSubLevel.getParentName());
             values.put(KEY_NAME, mSubLevel.getName());
             values.put(KEY_COINS_PRICE, mSubLevel.getCoins_price());
@@ -237,15 +250,43 @@ public class MyDatabase {
         try {
             ContentValues values = new ContentValues();
             values.put(KEY_LOCK_ID, mLock.getId());
+            values.put(KEY_BEST_POINT, mLock.getBestPoint());
             values.put(KEY_UNLOCK, mLock.getUnlockNextLevel());
 
             String sql = "select * from " + DATABASE_LOCK_TABLE + " where " + KEY_LOCK_ID + "='" + mLock.getId() + "'";
             cursor = db.rawQuery(sql, null);
             if (cursor != null && cursor.moveToFirst()) {
-                int update = db.update(DATABASE_LOCK_TABLE, values, KEY_UNLOCK + "=?", new String[]{mLock.getUnlockNextLevel() + ""});
+                int update = db.update(DATABASE_LOCK_TABLE, values, KEY_LOCK_ID + "=?", new String[]{mLock.getId() + ""});
                 Log.e("log", "content update : " + update);
             } else {
                 long v = db.insert(DATABASE_LOCK_TABLE, null, values);
+                Log.e("log", "content insert : " + v);
+
+            }
+
+
+        } catch (Exception e) {
+
+        }
+
+        cursor.close();
+    }
+
+    public void addPointData(MPoint mPoint) {
+        Cursor cursor = null;
+        try {
+            ContentValues values = new ContentValues();
+            values.put(KEY_POINT_ID, mPoint.getpId());
+            values.put(KEY_PRESENT_POINT, mPoint.getPresentPoint());
+            values.put(KEY_BEST_POINT, mPoint.getBestPoint());
+
+            String sql = "select * from " + DATABASE_POINT_TABLE + " where " + KEY_POINT_ID + "='" + mPoint.getpId() + "'";
+            cursor = db.rawQuery(sql, null);
+            if (cursor != null && cursor.moveToFirst()) {
+                int update = db.update(DATABASE_POINT_TABLE, values, KEY_POINT_ID + "=?", new String[]{mPoint.getpId() + ""});
+                Log.e("log", "content update : " + update);
+            } else {
+                long v = db.insert(DATABASE_POINT_TABLE, null, values);
                 Log.e("log", "content insert : " + v);
 
             }
@@ -338,16 +379,17 @@ public class MyDatabase {
         return levelArrayList;
     }
 
-    public MLock getLocalData(int id) {
+    public MLock getLocalData() {
         ArrayList<MLock> unlocks = new ArrayList<>();
-        MLock mLock = new MLock();
-        String sql = "select * from " + DATABASE_LOCK_TABLE + " where " + KEY_UNLOCK + "='" + id + "'";
+       MLock mLock = new MLock();
+        String sql = "select * from " + DATABASE_LOCK_TABLE ;
         Cursor cursor = db.rawQuery(sql, null);
         if (cursor != null && cursor.moveToFirst()) {
             do {
-
+                mLock = new MLock();
                 mLock.setId(cursor.getInt(cursor.getColumnIndex(KEY_LOCK_ID)));
                 mLock.setUnlockNextLevel(cursor.getInt(cursor.getColumnIndex(KEY_UNLOCK)));
+                mLock.setBestPoint(cursor.getInt(cursor.getColumnIndex(KEY_BEST_POINT)));
 
                 unlocks.add(mLock);
 
@@ -357,6 +399,27 @@ public class MyDatabase {
 
 
         return mLock;
+    }
+
+    public MPoint getPointData(int id) {
+        ArrayList<MPoint> mPoints = new ArrayList<>();
+        MPoint mPoint = new MPoint();
+        String sql = "select * from " + DATABASE_POINT_TABLE + " where " + KEY_POINT_ID + "='" + id + "'";
+        Cursor cursor = db.rawQuery(sql, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            do {
+
+                mPoint.setBestPoint(cursor.getInt(cursor.getColumnIndex(KEY_BEST_POINT)));
+                mPoint.setPresentPoint(cursor.getInt(cursor.getColumnIndex(KEY_PRESENT_POINT)));
+
+                mPoints.add(mPoint);
+
+            } while (cursor.moveToNext());
+            cursor.close();
+        }
+
+
+        return mPoint;
     }
 
     public ArrayList<MQuestions> getQuesData() {
@@ -406,14 +469,21 @@ public class MyDatabase {
         ArrayList<MSubLevel> assetArrayList = new ArrayList<>();
 
         MSubLevel mSubLevel;
-        String sql = "select a.lid,a.pNm,a.pid,a.name,a.coins_price,a.no_of_coins,b.unlock  from sub a left join lock b on a.lid=b.loid where " + KEY_PARENT_ID + "='" + id + "'";
+        String sql = "select a.lid,a.pNm,a.pid,a.name,a.coins_price,a.no_of_coins,b.un_lock,b.best_point from sub a left join lock_tb b on a.lid=b.loid where " + KEY_PARENT_ID + "='" + id + "'";
 //                " from " + DATABASE_SUB_LEVEL_TABLE + " a where " + KEY_PARENT_ID + "='" + id + "'";
-        Cursor cursor = db.rawQuery(sql, null);
+       Cursor cursor = db.rawQuery(sql, null);
         if (cursor != null && cursor.moveToFirst()) {
             do {
                 mSubLevel = new MSubLevel();
                 mSubLevel.setLid(cursor.getInt(cursor.getColumnIndex(KEY_LEVEL_ID)));
                 mSubLevel.setUnlockNextLevel(cursor.getInt(cursor.getColumnIndex(KEY_UNLOCK)));
+
+              try {
+                  mSubLevel.setBestPoint(cursor.getInt(cursor.getColumnIndex(KEY_BEST_POINT)));
+              }catch (Exception e){
+                  mSubLevel.setBestPoint(0);
+              }
+
                 mSubLevel.setParentId(cursor.getInt(cursor.getColumnIndex(KEY_PARENT_ID)));
                 mSubLevel.setParentName(cursor.getString(cursor.getColumnIndex(KEY_PARENT_NAME)));
                 mSubLevel.setName(cursor.getString(cursor.getColumnIndex(KEY_NAME)));

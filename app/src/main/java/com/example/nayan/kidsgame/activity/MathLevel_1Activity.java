@@ -56,6 +56,7 @@ public class MathLevel_1Activity extends AppCompatActivity {
         getOnlineData();
 //        preParedisplay();
         Global.INDEX_POSISION = getIntent().getIntExtra("index", 0);
+        Global.SUB_LEVEL_ID = getIntent().getIntExtra("Sid",0);
     }
 
     private void init() {

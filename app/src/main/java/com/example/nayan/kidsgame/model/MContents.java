@@ -15,6 +15,17 @@ public class MContents {
     private int presentId;
     private int presentType;
     private String click;
+    private int bestPoint;
+
+    public int getBestPoint() {
+        return bestPoint;
+
+    }
+
+    public void setBestPoint(int bestPoint) {
+        this.bestPoint = bestPoint;
+
+    }
 
     public String getClick() {
         return click;

@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,7 @@ public class SubLevelActivity extends AppCompatActivity implements View.OnClickL
     private TextView textView;
     private String lName;
     private int STORAGE_PERMISSION_CODE = 23;
+    private Button back;
     public static int pos;
 
 
@@ -160,6 +162,8 @@ public class SubLevelActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void init() {
+        back=(Button)findViewById(R.id.back);
+        back.setOnClickListener(this);
         Utils.levels = new ArrayList<>();
         mLevels = new ArrayList<>();
         database = new MyDatabase(this);
@@ -176,7 +180,7 @@ public class SubLevelActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void prepareDisplay() {
-        int item=Utils.getScreenSize(this,100);
+        int item=Utils.getScreenSize(this,80);
         textView.setText(lName);
         recyclerView.setLayoutManager(new GridLayoutManager(this, item));
         recyclerView.setAdapter(subLevelAdapter);
@@ -184,6 +188,9 @@ public class SubLevelActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
+        if (v.getId()==R.id.back){
+            finish();
+        }
        /* if (v.getPresentId() == R.id.imgseting) {
             final Dialog dialog = new Dialog(this);
             dialog.setTitle("Class1Activity Information");

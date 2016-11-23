@@ -49,6 +49,7 @@ public class GoingToAnotherTextActivity extends AppCompatActivity {
         subLevel = getIntent().getStringExtra("subLevel");
         parentName = getIntent().getStringExtra("parentLevel");
         txtName.setText(parentName + "(" + subLevel + ")");
+        Global.SUB_LEVEL_ID = getIntent().getIntExtra("Sid",0);
         Global.INDEX_POSISION = getIntent().getIntExtra("index",0);
 
 

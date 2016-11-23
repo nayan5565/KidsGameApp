@@ -44,6 +44,7 @@ public class Class2Activity extends AppCompatActivity {
 
         subLevel = getIntent().getStringExtra("subLevel");
         Global.INDEX_POSISION = getIntent().getIntExtra("index",0);
+        Global.SUB_LEVEL_ID = getIntent().getIntExtra("Sid",0);
         parentName = getIntent().getStringExtra("parentLevel");
 
         textView.setText(parentName+"-"+subLevel);

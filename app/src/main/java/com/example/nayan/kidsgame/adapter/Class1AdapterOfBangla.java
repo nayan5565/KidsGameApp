@@ -8,11 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.nayan.kidsgame.R;
-import com.example.nayan.kidsgame.utils.NLogic;
 import com.example.nayan.kidsgame.model.MContents;
+import com.example.nayan.kidsgame.utils.NLogic;
 
 import java.util.ArrayList;
 
@@ -98,7 +97,7 @@ public class Class1AdapterOfBangla extends RecyclerView.Adapter<Class1AdapterOfB
                 public void onClick(View v) {
                     mContents=textArrayList.get(getAdapterPosition());
 //                    nLogic.textClick(mContents);
-                    Toast.makeText(context,mContents.getTxt(), Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(context,mContents.getTxt(), Toast.LENGTH_SHORT).show();
                     nLogic.textClick(mContents,textArrayList.size());
                 }
             });

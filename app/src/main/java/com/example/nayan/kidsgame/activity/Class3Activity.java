@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.example.nayan.kidsgame.R;
 import com.example.nayan.kidsgame.adapter.Class3AdapterOfBangla;
 import com.example.nayan.kidsgame.model.MContents;
+import com.example.nayan.kidsgame.utils.Global;
 import com.example.nayan.kidsgame.utils.MyDatabase;
 import com.example.nayan.kidsgame.utils.SpacesItemDecoration;
 import com.example.nayan.kidsgame.utils.Utils;
@@ -41,6 +42,7 @@ public class Class3Activity extends AppCompatActivity {
         subLevel = getIntent().getStringExtra("subLevel");
         parentName = getIntent().getStringExtra("parentLevel");
         txtName.setText(parentName + "(" + subLevel + ")");
+        Global.SUB_LEVEL_ID = getIntent().getIntExtra("Sid",0);
     }
 
     private void prepareDisplay() {

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="100dp"
-    android:layout_height="100dp">
+    android:layout_width="80dp"
+    android:layout_height="80dp">
 
         <ImageView
             android:scaleType="fitXY"
@@ -11,15 +11,26 @@
 
         <ImageView
             android:id="@+id/imgLock"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:src="@drawable/locksc"
+            android:layout_above="@+id/txtLevel"
             android:layout_alignParentRight="true"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/locksc" />
+            android:layout_alignParentEnd="true" />
     <TextView
         android:layout_centerInParent="true"
         android:id="@+id/txtLevel"
         android:layout_width="match_parent"
         android:text="1"
+        android:textSize="20dp"
+        android:gravity="center"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_below="@id/txtLevel"
+        android:layout_centerInParent="true"
+        android:id="@+id/txtPoint"
+        android:layout_width="match_parent"
+        android:text="Point"
         android:textSize="20dp"
         android:gravity="center"
         android:layout_height="wrap_content" />

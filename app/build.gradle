@@ -36,4 +36,5 @@ dependencies {
     compile 'com.google.firebase:firebase-ads:9.4.0'
     compile 'com.google.android.gms:play-services-analytics:9.4.0'
     compile 'net.zetetic:android-database-sqlcipher:3.5.3'
+    compile files('libs/LeonidsLib.jar')
 }

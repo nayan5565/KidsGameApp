@@ -76,20 +76,7 @@ public class LevelAdapter extends RecyclerView.Adapter<LevelAdapter.MyViewholder
         return viewholder;
     }
 
-    public static String getIntToStar(int starCount) {
-        String fillStar = "\u2605";
-        String blankStar = "\u2606";
-        String star = "";
 
-        for (int i = 0; i < starCount; i++) {
-            star = star.concat(" " + fillStar);
-        }
-        for (int j = (3 - starCount); j > 0; j--) {
-            star = star.concat(" " + blankStar);
-        }
-
-        return star;
-    }
 
     @Override
     public void onBindViewHolder(MyViewholder holder, int position) {

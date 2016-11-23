@@ -7,7 +7,6 @@ import android.os.Environment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -16,6 +15,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.animation.Animation;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -46,7 +46,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private Button result, special, btnBangla, btnEnglish, btnMath, btnBanglaMath, btnDrawing;
-    private Toolbar toolbar;
+    private ImageView cloud1, cloud2;
     private MLevel mLevel;
     //    private static LevelAdapter levelAdapter;
     private static ArrayList<MLevel> levels;
@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     //    private RecyclerView recyclerView;
     private String image;
     private static String B_URL = Global.BASE_URL;
+
     private static String ALTER_URL = "";
     private Gson gson;
 
@@ -84,6 +85,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //                .build());
 
         init();
+        Utils.moveAnimation(cloud1,cloud2);
         getOnlineData();
         getOnlineContentsData();
         prepareDisplay();
@@ -108,7 +110,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btnBanglaMath = (Button) findViewById(R.id.btnBanglaMath);
         btnBanglaMath.setOnClickListener(this);
-
+        cloud1 = (ImageView) findViewById(R.id.imgCloud1);
+        cloud2 = (ImageView) findViewById(R.id.imgCloud2);
         image = DialogSoundOnOff.getPREF(this, DialogSoundOnOff.KEY_IMAGE);
         if (image.equals(1 + "")) {
             Utils.isSoundPlay = true;
@@ -122,7 +125,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 //        drawerLayout = (DrawerLayout) findViewById(R.id.drawer);
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
 
         result = (Button) findViewById(R.id.result);
         special = (Button) findViewById(R.id.special);
@@ -130,10 +132,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         result.setTextColor(0xffff00ff);
         special.setTextColor(0xffff00ff);
 //        recyclerView = (RecyclerView) findViewById(R.id.recycler);
-
-
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-
 //        levelAdapter = new LevelAdapter(this);
 
 
@@ -342,14 +340,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void prepareDisplay() {
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(R.drawable.home);
+
 
         //drawerFragment = (NavigationDrawerFragment) getSupportFragmentManager().findFragmentById(R.id.fragNavDrewer);
 //        drawerFragment.setUp(R.id.fragNavDrewer, drawerLayout, toolbar);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //        recyclerView.setLayoutManager(new GridLayoutManager(this, 1));
 //        recyclerView.setAdapter(levelAdapter);
 
@@ -402,6 +396,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         }
         if (v.getId() == R.id.btnBangla) {
+
             Intent intent = new Intent(MainActivity.this, SubLevelActivity.class);
             intent.putExtra("id", 1);
             intent.putExtra("name", "বাংলা  ");
@@ -415,6 +410,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
     }
+
+
+
+
 
 
 }

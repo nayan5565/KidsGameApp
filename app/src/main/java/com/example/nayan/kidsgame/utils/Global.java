@@ -5,6 +5,7 @@ package com.example.nayan.kidsgame.utils;
  */
 public class Global {
     public static int INDEX_POSISION;
+    public static int SUB_LEVEL_ID;
     public static final String API_LEVELS="content/match_game/v1/levels.php";
     public static final String API_CONTENTS="content/match_game/v1/contents.php";
     public static final String API_MATH="http://step2code.com/educare/api/test";

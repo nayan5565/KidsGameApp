@@ -3,10 +3,13 @@ package com.example.nayan.kidsgame.utils;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +29,7 @@ import java.util.Collections;
  */
 public class NLogic {
     private static final String MyPREFERENCE = "mypref";
-    private int previousId, count, clickCount, matchWinCount, previousType, gameWinCount, previousPoint, presentPoint, bestPoint;
+    private int previousId, count, counter, clickCount, matchWinCount, previousType, gameWinCount, previousPoint, presentPoint, bestPoint;
     private static NLogic nLogic;
 
     private ArrayList<MContents> list;
@@ -34,7 +37,8 @@ public class NLogic {
     private Context context;
     private Handler handler = new Handler();
     private RecyclerView.Adapter gameAdapter;
-    private MContents mContents;
+    private MContents mContents = new MContents();
+    //    private MLock mLock = new MLock();
     private Class3AdapterOfBangla class3Adapter;
 
 
@@ -58,7 +62,7 @@ public class NLogic {
         this.list = list;
         this.gameAdapter = adapter;
 
-//        bestPoint = mContents.getBestpoint();
+//        Utils.bestPoint = Utils.presentPoint;
 //        gameWinCount = mContents.getLevelWinCount();
 
 
@@ -70,6 +74,16 @@ public class NLogic {
 
     private void saveDb() {
         MyDatabase db = new MyDatabase(context);
+        MLock lock = new MLock();
+
+        lock.setId(Global.SUB_LEVEL_ID);
+        lock.setBestPoint(Utils.bestPoint);
+        db.addLockData(lock);
+        lock = new MLock();
+        MSubLevel mSubLevel = SubLevelActivity.mSubLevels.get(Global.INDEX_POSISION + 1);
+        lock.setId(mSubLevel.getLid());
+        lock.setUnlockNextLevel(1);
+        db.addLockData(lock);
 //        db.addLevelFromJson(mContents);
     }
 
@@ -95,6 +109,9 @@ public class NLogic {
     }
 
     public void textClick(MContents mContents, int listSize) {
+        counter++;
+        Log.e("counter", "is" + counter);
+
         //don't work if mid !=1 at first time because first time click count=1
         if (mContents.getMid() == clickCount + 1) {
             //clickcount store present mid
@@ -105,16 +122,30 @@ public class NLogic {
             Toast.makeText(context, "wrong click", Toast.LENGTH_SHORT).show();
         }
         if (count == listSize) {
-            resetList(listSize);
-            MSubLevel mSubLevel=SubLevelActivity.mSubLevels.get(Global.INDEX_POSISION+1);
-            MLock mLock=new MLock();
-            mLock.setId(mSubLevel.getLid());
-            mLock.setUnlockNextLevel(1);
-            MyDatabase db=new MyDatabase(context);
-            db.addLockData(mLock);
 
+            savePoint(listSize);
+            resetList(listSize);
+            Dialog dialog = new Dialog(context);
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+            dialog.setContentView(R.layout.dialog_level_cleared);
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            TextView txtPoint = (TextView) dialog.findViewById(R.id.txtLevelPoint);
+            TextView txtBestPoint = (TextView) dialog.findViewById(R.id.txtLevelBestPoint);
+            TextView txtScore = (TextView) dialog.findViewById(R.id.txtLevelScore);
+            txtBestPoint.setText("" + Utils.bestPoint);
+            txtScore.setText(presentPoint + "");
+            if (presentPoint == 50) {
+                txtPoint.setText(Utils.getIntToStar(1));
+            } else if (presentPoint == 75) {
+                txtPoint.setText(Utils.getIntToStar(2));
+            } else if (presentPoint == 100) {
+                txtPoint.setText(Utils.getIntToStar(3));
+            } else txtPoint.setText(Utils.getIntToStar(0));
+            dialog.show();
             Toast.makeText(context, "game over", Toast.LENGTH_SHORT).show();
+
         }
+
 
     }
 
@@ -159,11 +190,11 @@ public class NLogic {
 
                 if (matchWinCount == listSize / 2) {
 //                    VungleAdManager.getInstance(context).play();
-                    MSubLevel mSubLevel=SubLevelActivity.mSubLevels.get(Global.INDEX_POSISION+1);
-                    MLock mLock=new MLock();
+                    MSubLevel mSubLevel = SubLevelActivity.mSubLevels.get(Global.INDEX_POSISION + 1);
+                    MLock mLock = new MLock();
                     mLock.setId(mSubLevel.getLid());
                     mLock.setUnlockNextLevel(1);
-                    MyDatabase db=new MyDatabase(context);
+                    MyDatabase db = new MyDatabase(context);
                     db.addLockData(mLock);
                     Toast.makeText(context, "game over", Toast.LENGTH_SHORT).show();
 //                    handler.postDelayed(new Runnable() {
@@ -218,7 +249,7 @@ public class NLogic {
                     }
                 }, 1000);
                 previousId = 0;
-                previousType=0;
+                previousType = 0;
                 return;
             }
         }
@@ -237,15 +268,26 @@ public class NLogic {
         previousType = 0;
         previousId = 0;
         count = 0;
+        counter = 0;
         gameAdapter.notifyDataSetChanged();
 
     }
 
     private void savePoint(int listSize) {
+
+
         presentPoint = pointCount(listSize);
-        if (presentPoint > bestPoint) {
-//            mContents.setBestpoint(presentPoint);
+//        Utils.presentPoint = pointCount(listSize);
+//
+//        if (Utils.presentPoint > Utils.bestPoint) {
+//            Utils.bestPoint = Utils.presentPoint;
+//            saveDb();
+//        }
+        if (presentPoint > Utils.bestPoint) {
+
+            Utils.bestPoint = presentPoint;
             saveDb();
+
         }
 
     }
@@ -253,12 +295,12 @@ public class NLogic {
     private int pointCount(int listSize) {
         int point = 50;
 
-        if (clickCount == listSize) {
+        if (counter == listSize) {
             point = 100;
-        } else if (clickCount > listSize && clickCount <= listSize + listSize / 2) {
+        } else if (counter > listSize && counter <= listSize + listSize / 2) {
             point = 75;
         }
-
+        Log.e("pint", "point is" + point);
         return point;
     }
 
